@@ -6,6 +6,12 @@ from typing import Optional
 from itertools import zip_longest
 
 # Definition for singly-linked list.
+
+# Note (not related to this exercise): This listnode resembles
+# (car cdr) from lisp. With this abstraction, a whole programming
+# language has been built :) With this comment I wont to emphasize
+# the simplicity and power of this abstractinon
+
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
