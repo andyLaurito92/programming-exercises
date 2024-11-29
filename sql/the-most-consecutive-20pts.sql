@@ -1,7 +1,6 @@
 -- The most consecutive 20 pts seasons
 
 -- select column_name, data_type from information_schema.columns where table_name = 'player_seasons'
-
 with players_with_20pts as (
 	select player_name, pts, season from player_seasons ps 
 	where pts >= 20.0
@@ -39,4 +38,7 @@ max_consecutive_seasons_with_20_pts as (
 	order by max_consecutive_seasons desc
 )
 
- select * from max_consecutive_seasons_with_20_pts limit 20;
+ select player_name, pts, max_consecutive_seasons 
+ from max_consecutive_seasons_with_20_pts 
+ order by max_consecutive_seasons desc, pts desc
+ limit 20;
