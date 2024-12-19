@@ -51,3 +51,20 @@ class Solution:
 
 
         
+
+
+class Solution2:
+    def removeDuplicates(self, nums:list[int]) -> int:
+        if not nums:
+                return 0
+
+        index = 2
+        # i = 2, idx = 2, nums = [1,1,1,2,2,3]
+        # i = 3, idx = 3, nums = [1,1,2,2,2,3]
+        # i = 4, idx = 3, nums = [1,1,2,2,2,3]
+        for i in range(2, len(nums)):
+            if nums[i] != nums[index - 2]:
+                nums[index] = nums[i]
+                index += 1
+
+        return index		
