@@ -109,4 +109,4 @@ print("tests run ", result.testsRun)
 print("Errors ", result.errors)
 pprint(result.failures)
 stream.seek(0)
-
+print("test output\n", stream.read())
