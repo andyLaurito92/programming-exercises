@@ -69,6 +69,10 @@ class Solution:
         return greatest_h_idx
 
     def hIndex2(self, citations: list[int]) -> int:
+        """
+        With this method we improve O(N^2) to O(N log N) which is what it takes to
+        sort the array. We use constant memory for this algorithm
+        """
         n = len(citations)
 
         citations.sort() # sort in a non-decreasing order
