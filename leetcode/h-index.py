@@ -86,13 +86,46 @@ class Solution:
                 
         return greatest_h_idx
 
+    def hIndex3(self, citations: list[int]) -> int:
+        """
+        This solution uses a "bucketing" concept: Just add +1 to those citations
+        that u are part of. This algorithm takes O(N*M) to run, where N = len(citations)
+        and M = 1000 (highest number of citation u can have per a publication)
+
+        It's better than O(N^2), but still not good
+        """
+        def update_citation_map(citations_map, ith):
+            if num_citations.get(ith):
+                num_citations[ith] = num_citations[ith] + 1
+            else:
+                num_citations[ith] = 1
+
+        num_citations = {}
+        for ith in citations: #3, 0, 6, 1, 5
+            update_citation_map(num_citations, ith)
+            j = ith - 1
+            while j > 0:
+                update_citation_map(num_citations, j)
+                j -= 1
+
+        citation_keys = list(num_citations.keys())
+        citation_keys.sort()
+        h_idx = 0
+        for i in range(len(citation_keys) - 1, -1, -1):
+            if num_citations.get(citation_keys[i]) >= citation_keys[i]:
+                return citation_keys[i]
+        return h_idx
+
+        # {0 -> 1, 1 -> 4, 2 -> 3, 3 -> 3, 4 -> 2, 5 -> 2, 6 -> 1}
+
 
 class SolutionTests(TestCase):
     @classmethod
     def setUp(clss):
         mysol = Solution()
         #clss.h_index = mysol.hIndex
-        clss.h_index = mysol.hIndex2
+        #clss.h_index = mysol.hIndex2
+        clss.h_index = mysol.hIndex3
         
     def test_case_1(self):
         self.assertEqual(self.h_index([3,0,6,1,5]), 3)
