@@ -7,6 +7,15 @@ Y
  N		Y	
 """
 
+"""
+To think: It sounds like this design could be improved. To start with, we are
+having a DecisionTreeNode class that contains value, signal and constant when
+we already know that signal and constants only belong to internal nodes while
+values only to leafs.
+
+TODO: What if we drop the methods, we just grab the idea of the exercise and
+try to implement it as a normal tree having 2 more parameters: signal and constant?
+"""
 @dataclass
 class DecisionTreeNode:
     value: int = None
