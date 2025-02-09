@@ -71,6 +71,24 @@ def arrayManipulation2(n, queries):
     return max_val
 
 
+def arrayManipulation3(n, queries):
+    d = {}
+    for query in queries:
+        a, b, k = query
+        d.setdefault(a, 0)
+        d[a] = d[a] + k
+        d.setdefault(b+1, 0)
+        d[b+1] = d[b+1] - k
+
+    max_val = 0
+    curr = 0
+    for x in sorted(d):
+        curr += d[x]
+        if curr > max_val:
+            max_val = curr
+    return max_val 
+
+
 def read_input(filename: str) -> (int, list[list[int]]):
     with open('array_manipulation_input.txt') as fd:
         first_line = list(map(int, fd.readline().split(' ')))
@@ -86,13 +104,14 @@ def read_input(filename: str) -> (int, list[list[int]]):
 
 n, queries = read_input('array_manipulation_input.txt')
 assert 2484930878 == arrayManipulation2(n, queries)
+assert 2484930878 == arrayManipulation3(n, queries)
 
 assert 10 == arrayManipulation1(10, [[1, 5, 3], [4, 8, 7], [6, 9, 1]])
 assert 10 == arrayManipulation2(10, [[1, 5, 3], [4, 8, 7], [6, 9, 1]])
+assert 10 == arrayManipulation3(10, [[1, 5, 3], [4, 8, 7], [6, 9, 1]])
 
 
 # 31
 assert 31 == arrayManipulation2(10, [[2, 6, 8], [3, 5, 7], [1 ,8 ,1], [5 ,9 ,15]])
-
 
 assert 882 == arrayManipulation2(4, [[2, 3, 603], [1, 1, 286], [4, 4, 882]])
