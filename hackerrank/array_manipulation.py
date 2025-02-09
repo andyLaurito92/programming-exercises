@@ -71,6 +71,13 @@ def arrayManipulation2(n, queries):
     return max_val
 
 
+"""
+The prefixsum array let us see something obvious: We are adding up
+a lot of elements that are equal! From the above, we can also see
+that what we really care about is the start, a, and substracting
+the end, b + 1 = -k. From this idea we can get the following
+algorithm
+"""
 def arrayManipulation3(n, queries):
     d = {}
     for query in queries:
