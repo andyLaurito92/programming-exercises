@@ -52,6 +52,9 @@ def arrayManipulation1(n, queries):
     return max_val
 
 
+"""
+Note: This method implements the prefix sum array (which is precalculated list)
+"""
 def arrayManipulation2(n, queries):
     precalculated = [0] * (n + 2)
     for query in queries:
