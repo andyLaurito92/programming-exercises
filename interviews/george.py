@@ -48,7 +48,7 @@ class MyHeap:
     def sink(self, k: int) -> None:
         while 2 * k + 1 < self.n:
             highest_child = 2 * k + 1
-            if self.elements[2*k + 2] > self.elements[2*k + 1]:
+            if 2*k + 2 < self.n and self.elements[2*k + 2] > self.elements[2*k + 1]:
                 highest_child = 2*k + 2
 
             if self.elements[k] < self.elements[highest_child]:
@@ -77,6 +77,8 @@ class MyHeap:
 
         self.elements[0] = self.elements[self.n - 1]
         self.sink(0)
+        del self.elements[self.n - 1]
+        self.n -= 1
         return max_val
 
 
@@ -106,10 +108,15 @@ def second_largest3(mylist: list[int], k: int = 2) -> Optional[int]:
     In order to build the heap from the list, we use the heapify algorithm
     which takes O(N) runtime
     """
-
     myheap = MyHeap(mylist)
-    max_val = myheap.max()
-    second_largest = myheap.max()
-    while second_largest == max_val:
-        second_largest = myheap.max()
-    return second_largest
+    kth_largest = myheap.max()
+    k -= 1 # max_val is the 1st largest element
+    if k == 0:
+        return kth_largest # k = 1 meaning max value
+
+    while k != 0:
+        next_largest = myheap.max()
+        if next_largest != kth_largest: # myheap can have duplicates
+            k -= 1
+            kth_largest = next_largest
+    return kth_largest

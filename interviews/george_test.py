@@ -1,5 +1,5 @@
 from unittest import TestCase
-from george import second_largest
+from george import second_largest3 as second_largest
 
 
 
@@ -7,6 +7,10 @@ class Solution(TestCase):
     def test_input_example(self):
         mylist = [3,2,1,5,6,4]
         self.assertEqual(second_largest(mylist), 5)
+
+    def test_duplicates(self):
+        mylist = [1, 1, 2, 3, 4, -3, 8]
+        self.assertEqual(second_largest(mylist), 4)
 
     def test_emptylist(self):
         self.assertEqual(second_largest([]), None)
