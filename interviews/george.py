@@ -8,6 +8,7 @@ Requirements:
 """
 
 from typing import Optional
+import sys
 
 
 # 5, 5, 2
@@ -26,8 +27,8 @@ def second_largest(mylist: list[int]) -> Optional[int]:
 
 
 def second_largest2(mylist: list[int]) -> Optional[int]:
-    max_value = -99
-    second_largest = -99
+    max_value = -sys.maxsize
+    second_largest = -sys.maxsize
 
     for x in mylist:
         if x > max_value:
@@ -38,6 +39,7 @@ def second_largest2(mylist: list[int]) -> Optional[int]:
             x = second_largest
 
     return second_largest
+
 
 class MyHeap:
     def __init__(self, elements: list[int] | None = None):
@@ -64,7 +66,6 @@ class MyHeap:
                 self.elements[parent], self.elements[k] = self.elements[k], self.elements[parent]
             k = k // 2
    
-                
 
     def max(self) -> int:
         if self.n == 0:
