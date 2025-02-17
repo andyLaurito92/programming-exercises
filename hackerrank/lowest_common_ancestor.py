@@ -1,6 +1,8 @@
 """
 Find the lowest common ancestor in a BST
 
+Note: This is easier bc of how a bst is built
+Complexity arises when we need to find a lca of whatever type of tree
 """
 
 class TreeNode:
