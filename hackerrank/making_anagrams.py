@@ -1,3 +1,42 @@
+"""
+Given two strings, a and b, that may or may not be of the same length, determine the minimum number of character deletions required to make
+a and b anagrams. Any characters can be deleted from either of the strings.
+
+Example
+
+a = 'cde'
+b = 'dcf'
+
+Delete e from a and f from b so that the remaining strings are cd and dc which
+are anagrams. This takes 2 character deletions.
+
+Function Description
+
+Complete the makeAnagram function in the editor below.
+
+makeAnagram has the following parameter(s):
+
+    string a: a string
+    string b: another string
+
+Returns
+
+    int: the minimum total characters that must be deleted
+
+Input Format
+
+The first line contains a single string, a
+
+The second line contains a single string, b
+
+Constraints
+1 <= |a|, |b| <= 10^4
+
+The strings and consist of lowercase English alphabetic letters, ascii[a-z].
+
+"""
+
+
 import math
 import os
 import random
