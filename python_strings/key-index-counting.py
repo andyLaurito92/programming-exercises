@@ -55,3 +55,15 @@ Finally, copy back the auxiliary array to a
 """
 for i in range(n):
     a[i] = aux[i]
+
+
+
+"""
+Cormen presents the counting-sort algorithm similar, but not like this.
+The only difference is that it usees r spaces for the count array. Instead
+then of incrementing the idx, it decrements the count. So instead of starting
+from the first element to set up to the last one, you go backwards in Cormen
+
+IMPORTANT FACT of the above: You need to implement the last loop backwards
+to keep stability!
+"""
