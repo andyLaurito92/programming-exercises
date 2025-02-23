@@ -1,3 +1,4 @@
+from random import choice
 """
 This is a sorting algorithm that takes O(N) runtime and O(N) space time to run!
 
@@ -88,3 +89,48 @@ for i in reversed(range(n)):
 
 for i in range(n):
     a[i] = aux[i]
+
+
+
+"""
+Cormen exercise
+8.2-4 Describe an algorithm that, given n integers in the range 0 to k, preprocesses its input
+and then answers any query about how many of the n integers fall into a range [a..b] into O(1)
+time. Your algorithm should use O(n + k) preprocessing time
+"""
+
+class RangeBounded:
+    def __init__(self, a: list[int], k: int) -> None:
+        """
+        Receives list of elements in the range of [0, k]
+        Init runtime is O(N + K) and O(K) extra memory space
+        """
+        self.a = a
+        self.k = k
+        self.prefix_sum = [0] * (k + 1) # I'm assuming k is included
+        self.n = len(a)
+        for i in range(self.n):
+            self.prefix_sum[a[i]] += 1
+
+        for i in range(1, k):
+            self.prefix_sum[i] += self.prefix_sum[i - 1]
+
+        
+
+    def how_many_between(self, a:int, b:int) -> int:
+        return self.prefix_sum[min(b, self.k)] - self.prefix_sum[max(a - 1, 0)]
+
+
+
+k = 9
+# a = [choice(range(k)) for _ in range(10)]
+a = [5, 1, 2, 6, 5, 1, 7, 3, 6, 7]
+myrange = RangeBounded(a, k)
+
+assert 4 == myrange.how_many_between(0, 3)
+
+assert 3 == myrange.how_many_between(0, 2)
+
+assert 3 == myrange.how_many_between(3, 5)
+
+assert 6 == myrange.how_many_between(1, 5)
