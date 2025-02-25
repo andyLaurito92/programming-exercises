@@ -1,5 +1,5 @@
 """
-LSD radix sort is an algorithm that has been around since the 80's :D.
+LSD (least significant digit) radix sort is an algorithm that has been around since the 80's :D.
 It's based on key-index-counting. The main idea is to use key-index-counting
 backwards so we sort an array of strings of FIXED length
 """
