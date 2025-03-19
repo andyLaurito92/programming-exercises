@@ -35,6 +35,13 @@ def getMaximumEatenDishCount(N: int, D: list[int], K: int) -> int:
   return res
 
 
+assert 5 == getMaximumEatenDishCount(6, [1, 2, 3, 3, 2, 1], 1)
+
+assert 4 == getMaximumEatenDishCount(6, [1, 2, 3, 3, 2, 1], 2)
+
+assert 2 == getMaximumEatenDishCount(7, [1, 2, 1, 2, 1, 2, 1], 2)
+
+
 """
 Important lesson learned from this exercise:
 
