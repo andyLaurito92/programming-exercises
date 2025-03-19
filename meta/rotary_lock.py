@@ -38,4 +38,7 @@ assert 0 == getMinCodeEntryTime2(100, 10, [1] * 10)
 
 """
 To review: How modulus work with negative numbers
+
+Concept: wrap-around -> making something linear to behave
+as circular by connecting the last element to the first one
 """
