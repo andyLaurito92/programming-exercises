@@ -5,14 +5,14 @@ Note: This is easier bc of how a bst is built
 Complexity arises when we need to find a lca of whatever type of tree
 """
 
-class TreeNode:
+class TreeNodeBST:
     @classmethod
     def createFrom(clss, elements: list[int]) -> 'TreeNode':
         n = len(elements)
         if n == 0:
             raise ValueError("BST must have at least one element")
 
-        root = TreeNode(elements[0])
+        root = TreeNodeBST(elements[0])
         for i in range(1, n):
             root.insert(elements[i])
 
@@ -43,23 +43,25 @@ class TreeNode:
             if curr.value < val:
                 # go right
                 if curr.right is None:
-                    curr.right = TreeNode(val, None, None)
+                    curr.right = TreeNodeBST(val, None, None)
                     break
                 else:
                     curr = curr.right
             else:
                 # go to left
                 if curr.left is None:
-                    curr.left = TreeNode(val, None, None)
+                    curr.left = TreeNodeBST(val, None, None)
                     break
                 else:
                     curr = curr.left
 
-    def lowest_common_ancestor(self, v1: int, v2:int) -> int:
+        
+    def lowest_common_ancestor_bst(self, v1: int, v2:int) -> int:
         """
         Return the lowest common ancestor between v1 and v2
 
         Strong assumption: lca exists
+        This computes the lca in a BST! not a BT
         """
 
         # lowest common ancestor of root is root
@@ -111,20 +113,117 @@ class UnionFind:
         return curr
         
 
-
 elements = [4,2,3,1,7,6]
-root = TreeNode.createFrom(elements)
-assert 4 == root.lowest_common_ancestor(1, 7)
+root = TreeNodeBST.createFrom(elements)
+assert 4 == root.lowest_common_ancestor_bst(1, 7)
 
 elements = [2, 1, 3, 4, 5, 6]
-root = TreeNode.createFrom(elements)
-assert 4 == root.lowest_common_ancestor(4, 6)
+root = TreeNodeBST.createFrom(elements)
+assert 4 == root.lowest_common_ancestor_bst(4, 6)
 
 print(TreeNode.createFrom([5, 6, 7]))
 
 
+"""
+Another approach: Just use dfs in a graph
+"""
+
+from collections import deque
+
+class TreeNode:
+    value: int
+    left: 'TreeNode'
+    right: 'TreeNode'
+
+    @classmethod
+    def createFrom(clss, values: list[int]) -> 'TreeNode':
+        """
+        Creates a BT from the given values. The way of creating
+        it is by creating a complete BT, which means that if you want
+        it not to be a complete BT, you need to provide None values
+        to fill the gaps
+        """
+        n = len(values)
+        if n == 0:
+            raise ValueError("Expected at least one element")
+
+        root = TreeNode(values[0])
+        nextnode = deque()
+        nextnode.append(root)
+        for i in range(1, n - 1, 2):
+            curr = nextnode.popleft()
+            curr.left = TreeNode(values[i])
+            curr.right = TreeNode(values[i+1])
+
+            nextnode.append(curr.left)
+            nextnode.append(curr.right)
+        return root
+
+    def lowest_common_ancestor(self, v1:int, v2:int) -> int:
+        """
+        Returns the lowest common ancestor between v1 and v2
+
+        Strong assumption: Both v1 and v2 exists
+
+        Runtime complexity: Worst case scenario -> We have the
+        longest path for both vertices. Longest path is O(log N)
+        (size of the tree)
+        dfs = O(N) where N = number of vertices
+        find common lowest ancestor = O((log N)^2) Per each vertex
+        in the path, go and see if it belongs to the other path
+        """
+        if self.value == v1 or self.value == v2:
+            return self.value
+
+        def find(curr: 'TreeNode', path: list[int], tofind: int) -> (list['TreNode'], bool):
+            path.append(curr)
+            if curr.value == tofind:
+                return path, True
+
+            if curr.left is not None:
+                path, found = find(curr.left, path, tofind)
+                if found:
+                    return path, True
+            if curr.right is not None:
+                path, found = find(curr.right, path, tofind)
+                if found:
+                    return path, True
+
+            path.pop()
+            return path, False
+
+        path_to_v1, found = find(self, [], v1)
+
+        if not found:
+            raise ValueError(f"Expected to find {v1} but it wasn't found")
+
+        path_to_v2, found = find(self, [], v2)
+        if not found:
+            raise ValueError(f"Expected to find {v1} but it wasn't found")
+
+
+        i = len(path_to_v1) - 1
+        while True:
+            if path_to_v1[i] in path_to_v2:
+                return path_to_v1[i].value
+            i -= 1
+
+
+    def __repr__(self):
+        return str(self.value)
+
+    def __init__(self, value, left=None, right=None):
+        self.value = value
+        self.left = left
+        self.right = right
+
+
+"""
+These are not bsts
+"""
 elements = [5, 3, 8, 2, 4, 6, 7]
 root = TreeNode.createFrom(elements)
+
 assert 5 == root.lowest_common_ancestor(7, 3)
 
 
