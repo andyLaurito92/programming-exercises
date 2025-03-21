@@ -200,7 +200,7 @@ class TreeNode:
 
         path_to_v2, found = find(self, [], v2)
         if not found:
-            raise ValueError(f"Expected to find {v1} but it wasn't found")
+            raise ValueError(f"Expected to find {v2} but it wasn't found")
 
 
         i = len(path_to_v1) - 1
