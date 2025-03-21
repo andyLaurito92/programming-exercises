@@ -171,6 +171,7 @@ class TreeNode:
         dfs = O(N) where N = number of vertices
         find common lowest ancestor = O((log N)^2) Per each vertex
         in the path, go and see if it belongs to the other path
+        => O(N + logN ^2)
         """
         if self.value == v1 or self.value == v2:
             return self.value
