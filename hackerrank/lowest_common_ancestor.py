@@ -166,15 +166,21 @@ class TreeNode:
         Strong assumption: Both v1 and v2 exists
 
         Runtime complexity: Worst case scenario -> We have the
-        longest path for both vertices. Longest path is O(log N)
+        longest path for both vertices. Longest path is O(log N) X
+        NO! The worst case is in an unbalanced tree is O(N)!!!. The
+        above is true only for balanced trees :)
         (size of the tree)
         dfs = O(N) where N = number of vertices
+
         find common lowest ancestor = O((log N)^2) Per each vertex
         in the path, go and see if it belongs to the other path
         => O(N + logN ^2)
         """
         if self.value == v1 or self.value == v2:
             return self.value
+
+        if v1 == v2:
+            return v1
 
         def find(curr: 'TreeNode', path: list[int], tofind: int) -> (list['TreNode'], bool):
             path.append(curr)
