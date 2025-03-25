@@ -1,6 +1,10 @@
 """
 Find the lowest common ancestor in a BST
 
+What do we use this for?
+1. We can use this to find the shortest distance between 2
+nodes in a graph
+
 Note: This is easier bc of how a bst is built
 Complexity arises when we need to find a lca of whatever type of tree
 """
@@ -214,6 +218,27 @@ class TreeNode:
             if path_to_v1[i] in path_to_v2:
                 return path_to_v1[i].value
             i -= 1
+
+    def lowest_common_ancestor2(self, v1: int, v2:int) -> int:
+        def lca_helper(node: 'TreeNode') -> 'TreeNode':
+            if not node:
+                return None
+            if node.value == v1 or node.value == v2:
+                return node
+
+            left = lca_helper(node.left)
+            right = lca_helper(node.right)
+
+            if left and right:
+                return node
+
+            return left if left is not None else right
+
+        ancestor = lca_helper(self)
+        if not ancestor:
+            raise ValueError(f"LCA of {v1} {v2} not found")
+
+        return ancestor.value
 
 
     def __repr__(self):
