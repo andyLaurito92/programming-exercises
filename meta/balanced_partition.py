@@ -102,3 +102,34 @@ print(run_algorithm(brute_force))
 
 # For bigger N 
 print(run_algorithm(balanced_partition))
+
+
+"""
+Lesson learned: Don't use for line in f.readlines() !! This returns a list of all lines
+of the file. Instead, just do this: for line in f: --> This creates a generator over
+the file which is way more efficient!
+
+Under the hood:
+- When calling line in f: you are calling the __next__ function of the stream (it's an
+iterable)
+- The method yields 1 line each time (where a line ends up in either \n or \n\r)
+- In C: Cpython uses both bufferedio.c (https://github.com/python/cpython/blob/main/Modules/_io/bufferedio.c)
+and textio.c(https://github.com/python/cpython/blob/main/Modules/_io/textio.c)
+- OS level: Because we call per 8KB of file, we allow the O.S. to be more efficient
+and cache other portions of the file
+"""
+
+
+"""
+Interesting question:
+
+Is it possible for a row within the file to be larger than fit in memory?
+
+If it is, then the above solution would still work because we are saving
+the sum. We would just need to modify a bit the solution such that we
+return the sum from a function that iterates over a line which has to
+be read as the file (in chunks)
+
+For later returning the final result, instead of returning both partitions
+of the array we could just return the index in which we found a balanced partition
+"""
