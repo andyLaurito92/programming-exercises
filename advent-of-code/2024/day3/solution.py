@@ -1,3 +1,7 @@
+"""
+Part 1
+"""
+
 import re
 
 
@@ -15,3 +19,13 @@ for x, y in MULTIPLY_REGEX.findall(memory_dump):
     res += int(x) * int(y)
 
 print(res)
+
+
+"""
+Part 2
+"""
+
+MULTIPLY_REGEX_SECOND_PART = re.compile(r'(?!don\'t)mul\((\d{1,3}),(\d{1,3})\)')
+
+
+test2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
