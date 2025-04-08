@@ -22,6 +22,9 @@ class Solution:
         the rest of the journey can be made safely.
         """
         n = len(gas)
+        if n == 1:
+            return -1 if gas[0] - cost[0] < 0 else 0
+
         deltaprefixsum = [0] * n
         deltaprefixsum[0] = gas[0] - cost[0]
         for i in range(1, n):
@@ -35,7 +38,7 @@ class Solution:
             currmin = deltaprefixsum[0]
             for k in range(n):
                 if deltaprefixsum[k] < currmin:
-                    start = k + 1
+                    start = (k + 1) % n
                     currmin = deltaprefixsum[k]
             return start
 
