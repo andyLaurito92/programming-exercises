@@ -15,6 +15,31 @@ import math
 from typing import List
 
 class Solution:
+    def prefixsums(self, gas:list[int], cost:list[int]) -> int:
+        """
+        This works because of the following statement:
+        If the total sum is ≥ 0, and you start from just after the lowest prefix sum,
+        the rest of the journey can be made safely.
+        """
+        n = len(gas)
+        deltaprefixsum = [0] * n
+        deltaprefixsum[0] = gas[0] - cost[0]
+        for i in range(1, n):
+            deltaprefixsum[i] += deltaprefixsum[i-1] + gas[i] - cost[i]
+
+        if deltaprefixsum[n-1] < 0:
+            return -1
+        else:
+            # Find minimum
+            start = 1
+            currmin = deltaprefixsum[0]
+            for k in range(n):
+                if deltaprefixsum[k] < currmin:
+                    start = k + 1
+                    currmin = deltaprefixsum[k]
+            return start
+
+            
     """
     The best solution for this problem is the greedy solution. It
     can be solved in O(N) where N = len(gas)
@@ -135,6 +160,7 @@ cost = read_array(f"{inputdir}/cost1.txt")
 gas = read_array(f"{inputdir}/gas1.txt")
 
 assert sol.greedy([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
+assert sol.prefixsums([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
 
 assert sol.greedy([2, 3, 4], [3, 4, 3]) == -1
 
