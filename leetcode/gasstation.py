@@ -11,18 +11,28 @@ if you can travel around the circuit once in the clockwise direction, otherwise
 return -1. If there exists a solution, it is guaranteed to be unique.
 """
 
-# 1 2 3 4 5; 3 4 5 1 2
-# 3 7 5; 7 6 2  
-# -4 1 3 
-
-# -2 -2 -2 3 3
-
-# -1 -1 1
-
 import math
 from typing import List
 
 class Solution:
+    """
+    The best solution for this problem is the greedy solution. It
+    can be solved in O(N) where N = len(gas)
+    """
+    def greedy(self, gas:list[int], cost:list[int]) -> int:
+        total_cost = 0
+        start = 0 
+        current_interval = 0
+        for k in range(len(gas)):
+            edgeweight = gas[k] - cost[k]
+            current_interval += edgeweight
+            total_cost += edgeweight
+            if current_interval < 0:
+                start = k + 1
+                current_interval = 0
+        return -1 if total_cost < 0 else start
+            
+        
     def travelaroundfrom(self, gas:list[int], cost: list[int], i:int) -> bool:
         j = i
         n = len(gas)
@@ -35,12 +45,20 @@ class Solution:
             if j == i:
                 return True
 
+
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         """
         Idea of this solution: Compressed the super big list into
         smaller chunks, find if there's solution. if it is, then
         find starting point in the smaller interval instead of
         looking into the entire array
+
+        Why doesn't this work? Because the mapping between the original
+        array an the compressed array doesn't return correctly the index
+        of the partition in which the starting position lies into. The
+        problem is because what we really care about is the path, and
+        not the edges. When mapping this array into a compressed one,
+        we are "destroying" the information of the edges
         """
         
         n = len(gas)
@@ -54,7 +72,7 @@ class Solution:
             compressed_gas.append(sum(gas[i:j]))
             compressed_cost.append(sum(cost[i:j]))
             i = j
-            j += j
+            j += sizechunk
             # compute last interval; i.e. n - j
         j = j - sizechunk
         compressed_gas.append(sum(gas[j:n]))
@@ -64,13 +82,10 @@ class Solution:
         if res == -1:
             return -1
         else:
-            if n < sizechunk:
-                return res
-            # We need to map the idx with the original value
-            partition_num = res // sizechunk
-            i = sizechunk * partition_num
-            j = i + sizechunk
-            for k in range(i, min(j+1, n)):
+            # Res has the chunk in which we need to start
+            i = sizechunk * res 
+            j = min(i + sizechunk, len(gas))
+            for k in range(i, j):
                 if self.travelaroundfrom(gas, cost, k):
                     return k
 
@@ -79,7 +94,6 @@ class Solution:
         """
         Works, but unoptimal. Worst case is still O(N^2) which is too much
         """
-        n = len(gas)
         gas_values = set(gas)
         cost_values = set(cost)
 
@@ -120,12 +134,38 @@ inputdir = 'gasstation_input'
 cost = read_array(f"{inputdir}/cost1.txt")
 gas = read_array(f"{inputdir}/gas1.txt")
 
-assert sol.canCompleteCircuit2([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
+assert sol.greedy([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
 
-assert sol.canCompleteCircuit2([2, 3, 4], [3, 4, 3]) == -1
+assert sol.greedy([2, 3, 4], [3, 4, 3]) == -1
 
-assert sol.canCompleteCircuit(gas, cost) == 6690
+cost = read_array(f"{inputdir}/cost1.txt")
+gas = read_array(f"{inputdir}/gas1.txt")
+
+assert sol.greedy(gas, cost) == 6690
+
+cost = read_array(f"{inputdir}/cost2.txt")
+gas = read_array(f"{inputdir}/gas2.txt")
+
+assert sol.greedy(gas, cost) == 6690
+
+assert sol.greedy([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
 
 
-assert sol.canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
+sol.greedy(gas, cost)
 
+
+
+"""
+Note: This problem is actually called The Circular Walk with Net Zero Sum. It's stated as:
+
+Given a circular array of values, is there a starting point from which you can walk the full circle, accumulating the values step-by-step, without the cumulative sum ever going negative?
+
+The above problem pops up in system modeling (e.g. circuits, potential energy systems, balance models)
+
+It appears in areas like:
+
+-Scheduling with circular dependencies
+-Energy/charge conservation in cyclic networks
+-Circular buffer processing (e.g. audio/video streaming)
+
+"""
