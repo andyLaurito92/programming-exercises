@@ -86,7 +86,7 @@ Time
 """
 
 from functools import reduce
-from collections import defaultdict
+from collections import Counter
 
 class Solution:
     def ispermutation(self, s: str, words: dict[str, bool]) -> bool:
@@ -94,18 +94,19 @@ class Solution:
             TODO: Study a better way to search for this concatenated
             string in s. Rabin-karp-algorithm?
             """
-            if len(s) == 0 and all(words.values()):
+            unique_values = set(words.values())
+            if len(s) == 0 and len(unique_values) == 1 and 0 in unique_values:
                 return True
 
             start = 0
-            notused = {words: used for words, used in words.items() if not used}
+            notused = {words: val for words, val in words.items() if val != 0}
             for word in notused:
                 if hash(s[start:len(word)]) == hash(word):
-                    words[word] = True
+                    words[word] -= 1
                     if self.ispermutation(s[len(word):], words):
                         return True
                     else:
-                        words[word] = False
+                        words[word] += 1
             return False
 
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
@@ -117,9 +118,9 @@ class Solution:
         # i represents the last string
         start = 0
         res = []
-        for i in range(m, n):
-            words_used = {word: False for word in words}
-            if self.ispermutation(s[start:i], words_used):
+        words_used = Counter(words)
+        for i in range(m, n+1): # Slices don't include last value!!
+            if self.ispermutation(s[start:i], dict(words_used.items())):
                 res.append(start)
             start += 1
             
@@ -128,7 +129,9 @@ class Solution:
 
 sol = Solution()
 
-assert True == sol.ispermutation("barfoo", {"foo":False, "bar":False})
+assert True == sol.ispermutation("barfoo", {"foo":1, "bar":1})
 
 assert [] == sol.findSubstring("something", ["something", "should", "be", "bigger"])
 assert [0, 9] == sol.findSubstring("barfoothefoobarman", ["foo","bar"])
+
+assert [8] == sol.findSubstring("wordgoodgoodgoodbestword", ["word","good","best","good"])
