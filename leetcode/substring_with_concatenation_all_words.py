@@ -89,7 +89,7 @@ from functools import reduce
 from collections import Counter
 
 class Solution:
-    def ispermutation(self, s: str, words: dict[str, bool]) -> bool:
+    def ispermutation(self, s: str, words: dict[str, bool], words_hash: dict[str, int]) -> bool:
             """
             TODO: Study a better way to search for this concatenated
             string in s. Rabin-karp-algorithm?
@@ -101,9 +101,9 @@ class Solution:
             start = 0
             notused = {words: val for words, val in words.items() if val != 0}
             for word in notused:
-                if hash(s[start:len(word)]) == hash(word):
+                if hash(s[start:len(word)]) == words_hash[word]:
                     words[word] -= 1
-                    if self.ispermutation(s[len(word):], words):
+                    if self.ispermutation(s[len(word):], words, words_hash):
                         return True
                     else:
                         words[word] += 1
@@ -119,8 +119,9 @@ class Solution:
         start = 0
         res = []
         words_used = Counter(words)
+        words_hash = {word: hash(word) for word in words_used.keys()}
         for i in range(m, n+1): # Slices don't include last value!!
-            if self.ispermutation(s[start:i], dict(words_used.items())):
+            if self.ispermutation(s[start:i], dict(words_used.items()), words_hash):
                 res.append(start)
             start += 1
             
@@ -129,9 +130,14 @@ class Solution:
 
 sol = Solution()
 
-assert True == sol.ispermutation("barfoo", {"foo":1, "bar":1})
+assert True == sol.ispermutation("barfoo", {"foo":1, "bar":1}, {"foo": hash("foo"), "bar": hash("bar")})
 
 assert [] == sol.findSubstring("something", ["something", "should", "be", "bigger"])
 assert [0, 9] == sol.findSubstring("barfoothefoobarman", ["foo","bar"])
 
 assert [8] == sol.findSubstring("wordgoodgoodgoodbestword", ["word","good","best","good"])
+
+
+"""
+To think about: Perhaps we can use Knuth - Morris - Prat algorithm and https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm to build an automaton that matches all words at the same time?
+"""
