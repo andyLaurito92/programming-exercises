@@ -89,21 +89,19 @@ from functools import reduce
 from collections import Counter
 
 class Solution:
-    def ispermutation(self, s: str, words: dict[str, bool], words_hash: dict[str, int]) -> bool:
+    def ispermutation(self, s: str, start: int, words: dict[str, int]) -> bool:
             """
             TODO: Study a better way to search for this concatenated
             string in s. Rabin-karp-algorithm?
             """
             unique_values = set(words.values())
-            if len(s) == 0 and len(unique_values) == 1 and 0 in unique_values:
+            if len(unique_values) == 1 and 0 in unique_values:
                 return True
 
-            start = 0
-            notused = {words: val for words, val in words.items() if val != 0}
-            for word in notused:
-                if hash(s[start:len(word)]) == words_hash[word]:
+            for word, count in words.items():
+                if count != 0 and s.startswith(word, start):
                     words[word] -= 1
-                    if self.ispermutation(s[len(word):], words, words_hash):
+                    if self.ispermutation(s, start + len(word), words):
                         return True
                     else:
                         words[word] += 1
@@ -111,6 +109,8 @@ class Solution:
 
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
         m = reduce(lambda currsum, word: currsum + len(word), words, 0)
+        concatstrlen = sum(map(len, words))
+
         if len(s) < m:
             return []
 
@@ -119,9 +119,8 @@ class Solution:
         start = 0
         res = []
         words_used = Counter(words)
-        words_hash = {word: hash(word) for word in words_used.keys()}
         for i in range(m, n+1): # Slices don't include last value!!
-            if self.ispermutation(s[start:i], dict(words_used.items()), words_hash):
+            if self.ispermutation(s, start, dict(words_used)):
                 res.append(start)
             start += 1
             
@@ -130,12 +129,23 @@ class Solution:
 
 sol = Solution()
 
-assert True == sol.ispermutation("barfoo", {"foo":1, "bar":1}, {"foo": hash("foo"), "bar": hash("bar")})
+assert True == sol.ispermutation("barfoo", 0, {"foo":1, "bar":1})
 
 assert [] == sol.findSubstring("something", ["something", "should", "be", "bigger"])
 assert [0, 9] == sol.findSubstring("barfoothefoobarman", ["foo","bar"])
 
+assert [6, 9, 12] == sol.findSubstring("barfoofoobarthefoobarman", ["bar","foo","the"])
+
+
 assert [8] == sol.findSubstring("wordgoodgoodgoodbestword", ["word","good","best","good"])
+
+"""
+Lesson learned:
+
+Creating a slice s[start:end] creates a new substring! Which means that it's complexity
+equals the length of the slice. If we just want to compare characters, is way faster to
+use method startwith(prefix, start, end)
+"""
 
 
 """
