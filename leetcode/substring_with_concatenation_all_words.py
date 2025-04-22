@@ -120,7 +120,7 @@ class Solution:
         res = []
         words_used = Counter(words)
         for i in range(m, n+1): # Slices don't include last value!!
-            if self.ispermutation(s, start, dict(words_used)):
+            if self.ispermutation(s, start, dict(words_used), concatstrlen):
                 res.append(start)
             start += 1
             
