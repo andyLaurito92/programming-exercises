@@ -33,7 +33,10 @@ class DependencyTreeNode:
         version_per_dependency = {}
         version_conflict = False
         def checkConflict(node, level):
-            nonlocal version_conflict
+            # IMPORTANT If we don't define the nonlocal, then
+            # Python creates a local variable version_conflict and
+            # the variable I want to update never gets updated!!
+            nonlocal version_conflict 
             version = version_per_dependency.get(node.name)
             if version is None:
                 version_per_dependency[node.name] = node.version
