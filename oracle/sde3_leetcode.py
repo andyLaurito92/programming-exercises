@@ -107,3 +107,10 @@ dependencyTree = DependencyTreeNode("Pandas", "1.0.0",
 print(dependencyTree)
 
 dependencyTree.checkVersionConflict()
+
+
+
+# 3. Create a magic matrix from given number.
+# magic matrix - sum(rows) == sum(columns) == sum(diagonal)
+def magicmatrix(n: int) -> list[list[int]]:
+    
