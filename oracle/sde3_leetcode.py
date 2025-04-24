@@ -39,8 +39,11 @@ class DependencyTreeNode:
                 version_per_dependency[node.name] = node.version
             elif version != node.version:
                 version_conflict = True
+                latest_version = version if version > node.version else node.version
                 print((f"Conflict with dependecy {node.name}."
-                f" Have both {node.version} and {version}"))
+                       f" Have both {node.version} and {version}"
+                       f" Will keep version {latest_version} which is the latest"))
+                version_per_dependency[node.name] = latest_version
 
         self.bfs(checkConflict)
         if version_conflict:
