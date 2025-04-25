@@ -1,4 +1,8 @@
+
 """
+
+Coding
+
 2 questions
 
 1. you are given a function f that returns a list of (story, score), you need to implement
@@ -19,4 +23,9 @@ top 10 dinosaurs that run the fastest according to speed
 
 Seen the above exercise before, the idea is to see if you know how to read files, you consider
 border cases, you think if the file doesn't fit in memory, bla bla
+
+
+System troubleshooting
+
+“You have a colleague that tells you that is trying to deploy a new version of the app you own w/your team and it’s not working. All your team is in a conference and cannot help you out. What do you do?“
 """
