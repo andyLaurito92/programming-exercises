@@ -171,8 +171,11 @@ def characterReplacementSlidingWindowOptimized(s: str, k: int) -> int:
 
     for end in range(n):
         state[s[end]] += 1
+        # only character that makes sense to compare! It was the only
+        # updated at this time
         maxfreq = max(maxfreq, state[s[end]])
 
+        # Remember: end - start + 1 = len(substr) = len(s[start:end+1])
         while end - start + 1 - maxfreq > k:
             state[s[start]] -= 1
             start += 1
