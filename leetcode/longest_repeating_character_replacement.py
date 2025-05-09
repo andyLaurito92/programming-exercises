@@ -116,8 +116,12 @@ def characterReplacement2(s: str, k: int) -> int:
 In this approach, we implemenet a sliding window technique
 """
 from operator import itemgetter
+from collections import defaultdict
 
 
+"""
+First implementation with sliding window technique
+"""
 def characterReplacementSlidingWindow(s: str, k: int) -> int:
     n = len(s)
     if n < 2:
@@ -149,7 +153,37 @@ def characterReplacementSlidingWindow(s: str, k: int) -> int:
     return res
 
 
-for fun in [characterReplacementNaive, characterReplacement2, characterReplacementSlidingWindow]:
+"""
+Optimizing the above solution
+
+Note: defaultdict(int) will create values starting at 0, good
+for frequency dictionaries :)
+"""
+def characterReplacementSlidingWindowOptimized(s: str, k: int) -> int:
+    n = len(s)
+    if n < 2:
+        return n
+
+    res = 0
+    start = 0
+    state = defaultdict(int) # default int value is 0
+    maxfreq = 0
+
+    for end in range(n):
+        state[s[end]] += 1
+        maxfreq = max(maxfreq, state[s[end]])
+
+        while end - start + 1 - maxfreq > k:
+            state[s[start]] -= 1
+            start += 1
+
+        res = max(res, end - start + 1)
+    return res
+
+
+for fun in [characterReplacementNaive, characterReplacement2,
+            characterReplacementSlidingWindow,
+            characterReplacementSlidingWindowOptimized]:
     assert 4 == fun("ABAB", 2), f"Failed w/fn {fun}, input: ABAB k = 2"
     assert 3 == fun("AAAB", 0)
     assert 4 == fun("AABABBA", 1)
