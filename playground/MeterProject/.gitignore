@@ -1,0 +1,45 @@
+# Maven target directory
+/target/
+
+# Maven build helper output
+dependency-reduced-pom.xml
+release.properties
+buildNumber.properties
+.mvn/timing.properties
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDEs & Editors
+.vscode/
+*.swp
+*.swo
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Test reports
+/test-output/
+.surefire-*
+
+# Environment and local settings
+.env
+*.local
+
+# Ignore generated code (optional)
+generated/
