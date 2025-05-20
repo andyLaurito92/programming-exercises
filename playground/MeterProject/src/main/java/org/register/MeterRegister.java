@@ -2,7 +2,11 @@ package org.register;
 
 import org.flusher.FileFlushStrategy;
 import org.flusher.FlushStrategy;
+import org.metrics.CounterMeter;
+import org.metrics.GaugeMeter;
 import org.metrics.Meter;
+import org.metrics.MeterFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -10,9 +14,10 @@ import java.util.*;
  * My meter register
  *
  */
+@Component
 public class MeterRegister {
     private final FlushStrategy flushStrategy;
-    public final ArrayList<Meter> registry;
+    public final HashMap<String, Meter> registry;
     public static String ERROR_MESSAGE = "%s cannot be neither null nor empty";
 
     public MeterRegister() {
@@ -20,28 +25,47 @@ public class MeterRegister {
     }
 
     public MeterRegister(FlushStrategy flushStrategy) {
-        this.registry = new ArrayList<>();
+        this.registry = new HashMap<>();
         this.flushStrategy = flushStrategy;
     }
 
 
-    public void addMeter(Meter meter) {
-        if (meter == null) {
-            throw new IllegalArgumentException(String.format(ERROR_MESSAGE, meter));
+    public String addMeter(String type) {
+        if (type == null) {
+            throw new IllegalArgumentException(String.format(ERROR_MESSAGE, type));
         }
-        registry.add(meter);
+        UUID uuid = UUID.randomUUID();
+        String meterName = uuid.toString();
+        registry.put(meterName, MeterFactory.buildFrom(type));
+        return meterName;
     }
 
     /*
      * Get all meters registered in this registry
      */
-    public List<Meter> getMeters() {
-        return Collections.unmodifiableList(this.registry);
+    public Collection<Meter> getMeters() {
+        return Collections.unmodifiableCollection(this.registry.values());
     }
 
     public void flush() {
-        for (Meter meter : registry) {
+        for (Meter meter : registry.values()) {
             flushStrategy.flush(meter.getData());
         }
+    }
+
+    public Meter getMeter(String name) {
+        Meter val = registry.get(name);
+        if (val == null) {
+            throw new IllegalArgumentException(String.format("Invalid metric name %s", name));
+        }
+        return val;
+    }
+
+    public GaugeMeter getGauge(String name) {
+        return (GaugeMeter) getMeter(name);
+    }
+
+    public CounterMeter getCounter(String name) {
+        return (CounterMeter) getMeter(name);
     }
 }
