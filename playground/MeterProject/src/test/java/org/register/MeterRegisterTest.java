@@ -1,18 +1,15 @@
 package org.register;
 
-import junit.framework.TestCase;
-import org.junit.jupiter.api.Test;
-import org.metrics.GaugeMeter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit test for simple App.
  */
-public class MeterRegisterTest extends TestCase {
+public class MeterRegisterTest {
     /**
      * Create the test case
      *
@@ -21,21 +18,22 @@ public class MeterRegisterTest extends TestCase {
 
     private MeterRegister meterRegister;
 
-    public MeterRegisterTest(String testName )
+    public MeterRegisterTest()
     {
-        super( testName );
-        testName.hashCode();
         this.meterRegister = new MeterRegister();
     }
 
     /**
      * Rigourous Test :-)
      */
-    /*public void testAddingMetric() {
+    /*
+    @Test
+    public void testAddingMetric() {
         this.meterRegister.addMeter("myGauge");
         assertEquals(this.meterRegister.getMeters());
     }*/
 
+    @Test
     public void testGivenMetricNullWhenAddMetricThenIllegalArgumentRaised() throws IllegalArgumentException {
         assertThrows(IllegalArgumentException.class, () -> {
             meterRegister.addMeter(null);
