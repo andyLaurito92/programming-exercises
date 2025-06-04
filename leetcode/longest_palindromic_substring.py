@@ -26,6 +26,13 @@ the longest one
 
 Runtime: O(N^3) 
 Space: O(1)
+
+This is a bad solution because:
+- Even though you have found your longest palindrome, you will
+keep searching! (You don't care about checking whether the
+curr length of the curr palindrome is already higher than what
+it kepts to be searched)
+- You don't memoize previous results
 """
 def longestPalindrome1(s: str) -> str:
     n = len(s)
@@ -64,6 +71,8 @@ previous iteration)
 
 Runtime: O(N^3)
 Space: O(1)
+
+Note that the average time for this approach is N!!
 """
 
 def longestPalindrome2(s: str) -> str:
