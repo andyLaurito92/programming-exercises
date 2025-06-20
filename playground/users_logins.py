@@ -49,4 +49,5 @@ def leaderbord(users, logins) -> list[(str, int)]:
 users = [(1,"qw") , (2,"er")] # (id, name)
 logins = [(1,1), (1,1), (1,3), (2,4), (2,5), (1,7)]  # (id, timestamp)
 
+
 assert leaderbord(users, logins) == [("qw", 4), ("er", 2)]
