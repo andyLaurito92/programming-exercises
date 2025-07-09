@@ -60,7 +60,13 @@ import sys
 from collections import defaultdict
 
 # Complete the freqQuery function below.
-def freqQuery(queries):
+"""
+Naive approach: just define a frequency dictionary and ask wether
+the value is present or not
+val in set(elements.values()) takes O(N), therefore the runtime complexity
+is still O(N*q)
+"""
+def freqQuery1(queries):
     elements = defaultdict(int)
     res = []
     for operation, val in queries:
@@ -73,6 +79,40 @@ def freqQuery(queries):
                 elements[val] -= 1
         else:
             if val in set(elements.values()):
+                res.append(1)
+            else:
+                res.append(0)
+    return res
+
+
+"""
+Second approach: Mantain a dictionary of values and just ask
+wether the value is present or not
+
+Memory: O(2N)
+Runtime: O(q)
+"""
+def freqQuery2(queries):
+    elements = defaultdict(int)
+    values = defaultdict(int)
+    res = []
+    for operation, val in queries:
+        if operation == 1:
+            if elements[val] != 0:
+                values[elements[val]] -= 1
+            elements[val] += 1
+            values[elements[val]] += 1
+            ## add
+        elif operation == 2:
+            ## delete
+            if elements[val] != 0:
+                values[elements[val]] -= 1
+                elements[val] -= 1
+
+            if elements[val] != 0:
+                values[elements[val]] += 1
+        else:
+            if values[val]:
                 res.append(1)
             else:
                 res.append(0)
