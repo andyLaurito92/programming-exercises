@@ -104,3 +104,8 @@ This in my case was tricky, because it was not the usual system design interview
 And they problem was: Let's assume we are in a startup, we have the above architecture, and we are trying
 to do continuos integration, continuos deployment. We are trying to release a new version, and we are told
 that customers are having experience downgrade or even downtimes while doing so. Could you fix the problem?
+
+
+#### Solution
+
+One possible solution to the exercise about is to use bittorrent as this twitter guy explained almost 15 years ago :) https://vimeo.com/11280885?signup=true
