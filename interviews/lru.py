@@ -65,9 +65,116 @@ class LRUSmall:
         self._currcap -= 1
 
 
-class TestLRUSmall(TestCase):
+
+
+"""
+Let's now say that we do not have a small capacity. We need to be efficient on
+our operations: What could we do?
+
+Idea: Keep in a double linked list the least recently used keys. Every time you
+need to evict, you use this linked list to get the key that needs to be removed
+from the dict which is the first node
+
+For getting a value, we need to update the timestamp of a node in the list. The
+trick here is to store in the dictionary the node of the linked list. By doing this,
+we access the node in O(1). This node we move it to the end of the list in O(1) operation.
+"""
+
+
+class Node:
+    """
+    Implements a double linked list
+    """
+    def __init__(self, key: int, value:int, timestamp: datetime):
+        self.key = key
+        self.value = value
+        self.timestamp = timestamp
+        self.prev = None
+        self.thenext = None
+
+
+class DoubleLinkedList:
+    def __init__(self):
+        self.first = None
+        self.last = None
+
+    def addLast(self, key: int, value: int, timestamp: datetime) -> None:
+        if self.first is None:
+            self.first = Node(key, value, timestamp)
+            self.last = self.first
+
+        new = Node(key, value, timestamp)
+        self.last.thenext = new
+        new.prev = self.last
+        self.last = new
+
+        return new
+
+    def removeFirst(self):
+        if self.first is None:
+            raise ValueError("Cannot remove from an empty list")
+        removed = self.first
+        self.first = self.first.thenext
+        self.first.prev = None
+        return removed
+
+    def move_to_end(self, node):
+        """
+        Strong assumption: The node belongs to the list, therefore
+        the list contains at least one element
+        """
+        if self.first == self.last and self.first == node:
+            """
+            This is the only element in the list, nothing
+            to do
+            """
+            return
+        elif self.last == node:
+            """
+            Element is already the last one, nothing to do
+            """
+            return
+        elif self.first == node:
+            self.first = self.first.next
+            self.first.prev = None
+            self.last.next = node
+        else:
+            prev = node.prev
+            after = node.thenext
+            prev.thenext = after
+            after.prev = prev
+            self.last.next = node
+
+
+class LRU:
+    def __init__(self, capacity: int):
+        self._capacity = capacity
+        self._currcap = 0
+        self._lru = dict()
+        self._keys = DoubleLinkedList()
+
+    def put(self, key: int, value: int) -> None:
+        if self._currcap == self._capacity:
+            node = self._keys.removeFirst()
+            del self._lru[node.key]
+            self._currcap -= 1
+
+        node = self._keys.addLast(key, value, datetime.now())
+        self._lru[key] = node
+        self._currcap += 1
+
+    def get(self, key: int) -> Optional[int]:
+        node = self._lru.get(key, None)
+        if node is None:
+            return None
+        else:
+            self._keys.move_to_end(node)
+            return node.value
+
+
+class TestLRU(TestCase):
     def test_WhenCapacityFull_GivenPut_ThenleastRecentlyUsedRemoved(self):
-        lru = LRUSmall(3)
+        lru = LRU(3)  #LRUSmall(3)
 
         lru.put(1, 10)
         lru.put(2, 20)
@@ -86,7 +193,7 @@ class TestLRUSmall(TestCase):
         self.assertFalse(lru.get(1))
 
     def test_WhenStillCapacity_GivenPut_NothingRemoved(self):
-        lru = LRUSmall(10)
+        lru = LRU(10)  # LRUSmall(10)
 
         lru.put(1, 10)
         lru.put(2, 20)
