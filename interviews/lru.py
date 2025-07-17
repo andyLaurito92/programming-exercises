@@ -146,6 +146,20 @@ class DoubleLinkedList:
             self.last.next = node
 
 
+"""
+Runtime complexity:
+- put: O(1) because
+	- adding an element in a dictionary is O(1)
+	- removing the first element of a linked list is also O(1)
+	- removing an element from a dictionary is O(1)
+	- adding a new node as the last element of the linked list is O(1)
+- get: O(1) because
+	- move_to_end is a constant operation
+	- accessing a key in the dictionary is O(1)
+Memory:
+- You need an additional linked list to keep track of what node to delete next, so
+O(N) where N is the number of elements in the cache
+"""
 class LRU:
     def __init__(self, capacity: int):
         self._capacity = capacity
@@ -209,3 +223,16 @@ class TestLRU(TestCase):
         self.assertEqual(lru.get(2), 20)
         self.assertEqual(lru.get(3), 30)
         self.assertEqual(lru.get(4), 40)
+
+
+
+"""
+Conclustion:
+- Even though the exercise sound as heap :) it can be solved easily with a
+double linked list and by storing the node in the dictionary
+- Think of storing objects that can help you w/the problem u need to solve
+(store a node instead of a key-value pair)
+- The timestamp is implicit in the double linked list structure: Every time
+you do a get/put operation, you are updating a (key, value) pair which means
+move the node to the last. For evicting, just remove the first node
+"""
