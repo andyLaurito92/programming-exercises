@@ -236,3 +236,14 @@ double linked list and by storing the node in the dictionary
 you do a get/put operation, you are updating a (key, value) pair which means
 move the node to the last. For evicting, just remove the first node
 """
+
+
+
+"""
+To remember: The different types of caches you have:
+- LRU: Least recently used
+- MRU: Most recently used
+- FIFO
+- LIFO
+- MFU: Most frequenty used
+"""
